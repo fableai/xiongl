@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Knowledge Mind</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.3.11/dist/g6.min.js"></script>
+	<script src="jquery-3.3.1.min.js"></script>
+    <script>
+	
+$(document).ready(function() {
+    // 绑定按钮点击事件，或者可以直接调用 postRequest() 函数
+    // $('#yourButtonId').click(postRequest);
+
+//
+// 定义包含查询参数的URL
+const url = location.href;
+
+// 创建URL对象
+const parsedUrl = new URL(url);
+
+// 使用URLSearchParams获取查询参数
+const queryParams = new URLSearchParams(parsedUrl.search);
+
+// 提取userguid参数
+const userGuid = queryParams.get('userGuid');
+
+console.log(userGuid); // 输出：gold_browser_extension
+//
+
+    // AJAX POST 请求函数
+    function postRequest(userGuid) {
+        $.ajax({
+            url: 'https://infokeymind.com/api/Info/GetMind', // 替换为实际的API接口地址
+            type: 'POST',
+            contentType: 'application/json', // 发送JSON格式数据
+            data: JSON.stringify({"userGuid": userGuid}), // 转换JavaScript对象为JSON字符串
+            dataType: 'json', // 预期服务器返回的数据类型
+            success: function(response) {
+                // 请求成功，处理返回的数据				
+                console.log('Response:', response);
+				show(response.data);
+            },
+            error: function(xhr, status, error) {
+                // 请求失败，处理错误
+                console.error('Error:', error);
+				show();
+            }
+        });
+    }
+		
+    // 调用函数进行测试
+    postRequest(userGuid);
+});
+
+function show(jsonData){
+
+     // 定义数据源
+      const data = {};
+;
+/*
+	if(jsonData){
+		data = jsonData;
+	}
+*/	
+	debugger;
+    // 创建 G6 图实例
+	const heightParams = 800; 
+	const container = document.getElementById('container');
+    const width = container.scrollWidth;
+    const height = container.scrollHeight || heightParams;
+	const size = 40;
+	const nodeSep = 20;
+    const rankSep = 100;
+	/*
+      const graph = new G6.Graph({
+        container: 'mountNode', // 指定图画布的容器 id，与第 9 行的容器对应
+        // 画布宽高
+        width: 800,
+        height: 500,
+      });
+      // 读取数据
+      graph.data(data);
+      // 渲染图
+      graph.render();
+	*/
+	
+    const graph = new G6.TreeGraph({
+      container: 'container',
+      width,
+      height,
+      linkCenter: true,
+      modes: {
+        default: [
+          {
+            type: 'collapse-expand',
+            onChange: function onChange(item, collapsed) {
+              const data = item.get('model');
+              data.collapsed = collapsed;
+              return true;
+            },
+          },
+          'drag-canvas',
+          'zoom-canvas',
+        ],
+      },
+      defaultNode: {
+        size: size,
+      },
+      layout: {
+        type: 'dendrogram',
+        direction: 'LR',
+        nodeSep: nodeSep,
+        rankSep: rankSep,
+        radial: true,
+      },
+    });	
+
+    graph.node(function (node) {
+      return {
+        label: node.id,
+      };
+    });
+
+    graph.data(jsonData);
+    graph.render();
+    graph.fitView();	
+	// 定位到画布中心
+	graph.fitCenter();	
+
+}	
+ 
+    </script>
+  </body>
+</html>

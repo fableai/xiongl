@@ -1,0 +1,191 @@
+
+.knowledg-lib {
+    height: 100%;
+
+    :global {
+        .ant-tag:hover {
+            transform: scale(1.05);
+            transition: transform .2s;
+        }
+
+        .ant-card-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 24px;
+
+            li {
+                border-inline-end: none !important
+            }
+        }
+    }
+}
+
+.knowledg-lib-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 60px;
+    padding: 0;
+
+    .knowledg-lib-header-search {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+
+    }
+
+    .knowledg-lib-header-search-suffix {
+        display: flex;
+        align-items: center;
+
+        .knowledg-lib-header-ai-search {
+            width: 40px;
+            height: 40px;
+            margin-right: 24px;
+            cursor: pointer;
+        }
+
+        .knowledg-lib-header-normal-search {
+            height: 40px;
+            color: var(--special-block-color) !important;
+            border-radius: 22px;
+            background: var(--special-block-linear-gradient-bg) !important;
+        }
+    }
+
+    :global {
+        .ant-input-affix-wrapper {
+            background-color: var(--ant-layout-header-bg);
+        }
+    }
+}
+
+.knowledg-lib-content {
+    display: flex;
+
+    .knowledg-lib-content-tabs {
+        width: 196px;
+        height: -webkit-fill-available;
+        padding: 16px 12px;
+        background-color: var(--ant-layout-header-bg);
+        overflow-y: auto;
+
+        :global {
+            .ant-segmented {
+                background-color: transparent;
+            }
+
+            .ant-segmented-item {
+                border-radius: 10px;
+                background-color: var(--ant-layout-body-bg);
+
+                .ant-segmented-item-icon {
+                    font-family: Barlow;
+                    font-size: 18px;
+                    font-style: italic;
+                    font-weight: 900;
+                    line-height: 18px;
+                    letter-spacing: 0.01em;
+                    text-align: left;                     
+                }
+
+                &:nth-of-type(1),
+                &:nth-of-type(n+7) {
+                    .ant-segmented-item-icon {
+                        display: none;
+                    }
+                }
+
+                &:nth-of-type(2) {
+                    .ant-segmented-item-icon {
+                        color: #F40A36;                      
+                    }
+                }
+
+                &:nth-of-type(3) {
+                    .ant-segmented-item-icon {
+                        color: #F86421;                    
+                    }
+                }
+
+                &:nth-of-type(4) {
+                    .ant-segmented-item-icon {
+                        color: #FEB528;           
+                    }
+                }
+
+                &:nth-of-type(5) {
+                    .ant-segmented-item-icon {
+                        color: #703EFD;                      
+                    }
+                }
+
+                &:nth-of-type(6) {
+                    .ant-segmented-item-icon {
+                        color: #703EFD;                      
+                    }
+                }
+            }
+    
+            .ant-segmented-item:not(:last-child) {
+                margin-right: 12px;
+                margin-bottom: 12px;
+            }
+
+            .ant-segmented-item-label {
+                max-width: 172px;
+            }
+    
+            .ant-segmented-item-selected {
+                font-weight: bolder;
+            }
+    
+            .ant-segmented .ant-segmented-group {
+                flex-wrap: wrap;
+            }
+        }
+    }
+
+    .knowledg-lib-content-list {
+        width: calc(100% - 196px);
+        padding: 24px 40px;
+        overflow: auto;
+
+        .empty {
+            height: 100%;
+
+            :global {
+                .ant-spin-nested-loading,
+                .ant-spin-container,
+                .ant-list-empty-text,
+                .ant-empty {
+                    height: 100%;
+                }
+
+                .ant-empty {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0;
+                }
+            }
+        }
+        
+    }
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:  #c5c5c5a1;
+    backdrop-filter: blur(2px);
+}

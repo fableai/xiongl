@@ -1,0 +1,200 @@
+import { useVerificationCodeCD } from "@/hooks";
+import { Button, Form, Input, Modal,Space , message,Spin } from "antd";
+import { create } from 'zustand'
+import styles from './style.module.less'
+import { fetchSaveShortHand } from "@/service";
+import useGlobalStore from "@/store";
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+import { useState } from "react";
+import { debounce } from "lodash";
+import useKnowledgeLibStore from '../../pages/Workbench/KnowledgeLib/store'
+
+// const markdown = `
+// # Your markdown here
+// `
+
+export type ShortHandStore = {
+    open: boolean,
+    setOpen: (open: boolean) => void,
+
+    infoGuid: string,
+    setInfoGuid: (infoGuid: string) => void,
+
+    saveShortHand: (params: { infoGuid: string, title: string, content: string }) => Promise<any>,
+}
+
+/**
+ * [状态] - 保存速记弹窗
+ */
+export const useShortHandStore = create<ShortHandStore>((set) => ({
+    open: false,
+    setOpen: (open) => set({ open }),
+
+    infoGuid:"",
+    setInfoGuid: (infoGuid) => set({ infoGuid }),
+
+    saveShortHand: async (params) => {
+        const { userGuid } = useGlobalStore.getState()
+
+        await fetchSaveShortHand({
+            userGuid,
+            ...params
+        })
+    },
+}))
+
+/**
+ * [组件] - 速记弹窗
+ * @returns 
+ */
+export function ShortHandModal() {
+    const { open, setOpen } = useShortHandStore();
+
+    const onOk = () => {
+        setOpen(false)
+    }
+
+    const onCancel = () => {
+        setOpen(false)
+    }
+
+    return (
+        <Modal
+            open={open}
+            width={1000}
+            title={"每日记录"}
+            onOk={onOk}
+            onCancel={onCancel}
+            footer={null}
+        >
+            <ShortHand />
+        </Modal>
+    )
+}
+
+/**
+ * [组件] - 速记
+ * @returns 
+ */
+export function ShortHand({ richText,initialTitle,infoGuid  }) {    
+    const store = useKnowledgeLibStore();
+
+    const { saveShortHand, setOpen } = useShortHandStore();
+
+    const [loading, setLoading] = useState(false);
+
+    // 使用传入的initialTitle作为初始值，如果没有传入则为空字符串
+    const [infoGuidValue, setInfoGuidValue] = useState(infoGuid || '');
+
+    // 使用传入的initialTitle作为初始值，如果没有传入则为空字符串
+    const [titleValue, setTitleValue] = useState(initialTitle || '');
+    // 定义一个处理输入变化的函数
+    const handleTitleChange = (e) => {
+        // e.target.value是输入框当前的值
+        setTitleValue(e.target.value);
+    };
+
+    const [value, setValue] = useState(richText || ""); // 使用传入的richText作为初始值，如果没有传入则为空字符串
+
+    //参考：https://www.cnblogs.com/sxliu414/p/18258997
+	// 自定义工具栏
+	const modules = {
+		// 方式1: 可以是简单的一维数组配置
+		// toolbar: ["bold", "italic", "underline", "strike", "blockquote"]
+		// 方式2: 可以配置二维数组，进行多个选项的配置
+		toolbar: [
+			["bold", "italic", "underline", "strike", "blockquote"],
+			// 或者针对某一个配置项的key值，进行配置
+			[{ header: [1, 2, false] }],
+			[{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+			["link", "image"],
+			["clean"],
+			[{ size: ["small", false, "large", "huge"] }],
+			[{ color: [] }, { background: [] }]
+		]
+		// 方式3: 可以自己指定工具栏的容器
+		// toolbar: "#rq-toolbar"
+	};
+
+	// 剩下参数 delta: DeltaStatic, source: Sources, editor: ReactQuill.UnprivilegedEditor
+	const handleChangeValue = debounce((value: string) => {
+		console.log("富文本的值：", value);
+		setValue(value);
+	}, 500);
+
+    const ok = async () => {
+        setLoading(true);
+        try {
+            const { userGuid } = useGlobalStore.getState();
+            const result = await saveShortHand({                
+                infoGuid: infoGuidValue,
+                title: titleValue,
+                content: value
+            });            
+        } finally {
+            setLoading(false);
+            setOpen(false);
+            
+            //重置搜索条件
+            store.reset();
+            await store.fetchLabels();            
+        }
+    }
+
+    return (
+        // ReactDOM.render(
+        //     <Markdown>{markdown}</Markdown>,
+        //     document.querySelector('#content')
+        //   )
+        //   <Markdown remarkPlugins={[remarkGfm]}>*React-Markdown* now supports ~strikethrough~. Thanks to gfm plugin.</Markdown>   
+        // <div >
+        //     <div style={{height:'600px'}}>
+        //         <ReactQuill theme="snow" style={{height:'80%'}}   />
+        //     </div>
+        //     <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+        //         {'确认'}
+        //     </Button>
+        // </div>
+
+<div className="react-quill-wrap">
+    {/* <h2 className="title">富文本编辑器</h2> */}
+    
+    <Spin spinning={loading} tip="生成中..." >      
+    <Space.Compact style={{ width: '80%' ,paddingBottom:'10px' }}>
+      {/* <Input defaultValue="Combine input and button" /> */}
+      {/* Titles can be inputted or generated by AI */}
+   
+      <Input placeholder="If empty, AI will generate a title based on content; otherwise, enter your title." allowClear 
+       value={titleValue}
+       onChange={handleTitleChange}
+      />
+      {/* <Button type="primary">AI Gen</Button> */}
+    </Space.Compact>
+
+    <div className="quill-editor-wrap">
+        {/* 自定义的工具栏 */}
+        {/* <div className="quill-editor-toolbar" id="rq-toolbar">
+            <button className="ql-bold"></button>
+            <button className="ql-italic"></button>
+        </div> */}
+        <div style={{height:'600px'}}>
+            <ReactQuill theme="snow" modules={modules} value={value} onChange={handleChangeValue}  style={{height:'80%'}}/>
+        </div>
+        <Button type="primary" onClick={ok}>
+            {'确认'}
+        </Button>
+    </div>
+    </Spin>
+</div>
+
+
+    )
+}

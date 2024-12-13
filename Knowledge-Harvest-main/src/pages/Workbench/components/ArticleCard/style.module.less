@@ -1,0 +1,144 @@
+.knowledg-lib-article-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    padding-bottom: 8px;
+
+    .knowledg-lib-article-header-label {
+        margin: 8px 4px;
+        min-height: 25px;
+        
+        :global {
+            
+            .ant-tag {
+                color: var(--special-block-color);
+                background: var(--special-block-linear-gradient-bg2);
+                border-radius: 20px;
+                padding: 2px 12px;
+            }
+        }
+    }
+
+    .knowledg-lib-article-header-source {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .knowledg-lib-article-header-source-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            color: var(--ant-color-primary-text);
+            background-color: var(--ant-color-primary-bg);
+        }
+
+        .knowledg-lib-article-header-source-desc {
+            font-weight: bolder;
+            font-size: 12px;
+            color: var(--ant-color-text-tertiary);
+        }
+    }
+}
+
+.knowledg-lib-article-content {
+    .knowledg-lib-article-title {
+        font-weight: bolder;
+        font-size: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .knowledg-lib-article-info {
+        display: flex;
+        color: var(--ant-color-text-tertiary);
+        padding: 6px 0;
+
+        .knowledg-lib-article-info-date {
+            margin-right: 16px;
+        }
+    }
+
+    .knowledg-lib-article-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        min-height: 112px;      //摘要+图片区域撑起最小高度，保证网页和视频类的卡片高度一致
+    }
+    
+    .knowledg-lib-article-abstract {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3; /* 限制在一个块元素显示的行数 */
+        text-overflow: ellipsis;
+        width: 70%;
+        height: 70px;
+    }
+
+    // 视频类的图标比默认小，导致视频类卡片比网页的矮，
+    // 这里通过只修改摘要区域的高度，保证卡片对齐;修改padding-top保证摘要内容基本对齐网页
+    .knowledg-lib-article-abstract-video {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3; /* 限制在一个块元素显示的行数 */
+        text-overflow: ellipsis;
+        width: 70%;
+        // height: 115px;
+        height: 70px;
+        // padding-top: 20px;
+    }
+
+    .knowledg-lib-article-detail-btn {
+        color: var(--ant-color-primary-text);
+        border-color: var(--ant-color-primary-text);
+    }
+
+    .knowledg-lib-article-keyword {
+        min-height: 22px;
+        margin-top: 42px;
+
+        :global(.ant-tag) {
+            color: var(--ant-color-primary-text);
+            border-color: var(--ant-color-primary-border);
+            background-color: var(--ant-color-primary-bg);
+            margin-bottom: 6px;
+        }
+    }
+
+    .knowledg-lib-article-img {
+        width: 25%;
+    }
+}
+
+.knowledg-lib-article-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .knowledg-lib-article-action-op {
+        :global {
+            .anticon:not(:last-child) {
+                margin-right: 16px;
+            }
+    
+            .anticon {
+                font-size: 16px;
+                color: var(--ant-color-primary-text);
+            }
+        }
+    }
+
+    :global {
+        .ant-tag {
+            display: flex;
+            align-items: center;
+        }
+    }
+}

@@ -1,0 +1,134 @@
+.article-detail-drawer {
+    :global {
+        .ant-drawer-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    }
+
+    .article-detail-content {
+        position: relative;
+        flex: 1;
+
+        .article-detail-content-item {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.article-container-headbtn{
+    display: flex; /* 启用flex布局 */
+
+    .headbtnmargin{
+        margin: 0px 5px 0px 5px;
+    }
+}
+
+.article-container{
+    display: flex; /* 启用flex布局 */
+    justify-content: space-between; /* 使子元素平行排列，并且两端对齐 */
+}
+
+.article-detail {
+    font-size: 16px;
+    color: var(--ant-color-text-secondary);
+
+    .article-detail-item {
+        margin-bottom: 24px;
+    }
+
+    .article-detail-title {
+        font-size: 16px;
+    }
+
+    .label {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 36px 0 16px;
+        color: var(--ant-color-text);
+    }
+
+    .article-detail-abstract {
+
+        .article-detail-abstract-content {
+
+        }
+
+        .article-detail-abstract-label {
+            
+        }
+    }
+
+    .article-detail-key-info {
+
+        .article-detail-key-info-label {
+            
+        }
+    }
+
+    .article-detail-keyword {
+        display: flex;
+        flex-direction: column;
+
+        .article-detail-keyword-label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 16px;
+        }
+
+        .article-detail-keyword-tags {
+            display: flex;
+            font-size: 16px;
+        }
+
+        .article-detail-keyword-tag {
+            color: var(--ant-color-primary-text);
+            margin-right: 24px;
+        }
+    }
+
+    .article-detail-labels {
+        .article-detail-labels-tags {
+            :global {
+                .ant-tag {
+                    color: var(--ant-color-primary-text);
+                    border-color: var(--ant-color-primary-text);
+                    border-radius: 50px;
+                    font-size: 16px;
+                    padding: 8px 12px;
+                }
+            }
+        }
+    }
+}
+
+.comments-list-container {
+    max-height: 100px; /* 根据需要调整最大高度 */
+    // overflow-y: auto; /* 出现滚动条 */
+    // position: relative; /* 相对定位，确保固定定位的评论框在该容器内 */
+
+    // max-height: calc(100vh - 500px); /* 根据需要调整最大高度，减去评论框的高度 */
+    overflow-y: auto; /* 出现滚动条 */
+    margin-bottom: 10px; /* 为固定在底部的评论框留出空间 */
+  }
+  
+  .fixed-comment-box {    
+    position: fixed;
+    bottom: 0;
+    // width: 100%;
+    width:730px;
+    background: white;
+    padding: 10px;
+    // box-shadow: 0 -1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.2); /* 增加阴影以防止内容穿透 */
+    z-index: 1000; /* 确保它在其他内容之上 */    
+  }

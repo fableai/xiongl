@@ -1,0 +1,61 @@
+.shareArticlePage {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+
+    background: white; // 确保背景颜色不是透明，以便阴影可见
+    // box-shadow: inset 0 0 10px 5px rgba(128, 0, 128, 0.5); // 淡紫色渐变效果
+    box-shadow: inset 0 0 10px 5px rgba(96, 91, 211, 0.5); // 淡紫色渐变效果
+
+    .content {
+      margin-top: 20px;
+    }
+  
+    .abstract, .allContent, .comments {
+      margin-bottom: 20px;
+    }
+  
+    .keywords, .labels {
+      margin-top: 10px;
+      
+      :global(.ant-tag) {
+        margin-bottom: 5px;
+      }
+    }
+  
+    .addComment {
+      margin-top: 20px;
+    }
+  
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+  
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .comments-list-container {
+    max-height: 1000px; /* 根据需要调整最大高度 */
+    // overflow-y: auto; /* 出现滚动条 */
+    // position: relative; /* 相对定位，确保固定定位的评论框在该容器内 */
+
+    // max-height: calc(100vh - 500px); /* 根据需要调整最大高度，减去评论框的高度 */
+    overflow-y: auto; /* 出现滚动条 */
+    margin-bottom: 10px; /* 为固定在底部的评论框留出空间 */
+  }
+  
+  .fixed-comment-box {    
+    position: fixed;
+    bottom: 0;
+    // width: 100%;
+    width:800px;
+    background: white;
+    padding: 10px;
+    // box-shadow: 0 -1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.2); /* 增加阴影以防止内容穿透 */
+    z-index: 1000; /* 确保它在其他内容之上 */    
+  }
