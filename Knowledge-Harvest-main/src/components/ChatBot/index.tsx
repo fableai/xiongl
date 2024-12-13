@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatBot, { Settings } from 'react-chatbotify';
 import { theme } from 'antd';
-import 'react-chatbotify/dist/index.css';
+import 'react-chatbotify/index.css';
 import './style.module.less';
 
 export const ChatBotComponent: React.FC = () => {
