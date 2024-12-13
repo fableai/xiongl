@@ -1,56 +1,48 @@
-import { Layout, Menu, Popover, Image,Button } from 'antd';
-import { startTransition, useEffect,useState } from 'react';
+import { Layout, Menu, Popover, Image } from 'antd';
+import { startTransition, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { ProductOutlined, FlagOutlined ,FileAddOutlined} from '@ant-design/icons';
+import { ProductOutlined, FlagOutlined, FileAddOutlined } from '@ant-design/icons';
 import styles from './style.module.less';
 import useWorkbenchStore from './store';
 import { RouteNames } from '../../router';
 import UserBox from '../../components/UserBox';
 import useGlobalStore from '@/store';
 import { IMAGES } from '@/assets';
+import { ShortHandModal, useShortHandStore } from '../../components/ShortHand';
+import { ChatBotComponent } from '../../components/ChatBot';
 
-import { ShortHandModal, useShortHandStore } from '../../components/ShortHand'
-
-
-const { Sider, Content } = Layout
+const { Sider, Content } = Layout;
 
 export default function Workbench() {
     const location = useLocation();
     const navigate = useNavigate();
-    const store = useWorkbenchStore()
-    const globalStore = useGlobalStore(({ userInfo }) => ({ userInfo }))
+    const store = useWorkbenchStore();
+    const globalStore = useGlobalStore(({ userInfo }) => ({ userInfo }));
 
     const shortHandStore = useShortHandStore(({ setOpen }) => ({ setOpen }));
 
     useEffect(() => {
-        const { pathname } = location
+        const { pathname } = location;
 
         if (pathname === RouteNames.Workbench || !Object.values(RouteNames).includes(pathname as RouteNames)) {
-            // 跳转到知识库
-            navigate(RouteNames.KnowledgeLib)
+            navigate(RouteNames.KnowledgeLib);
         }
 
-        store.setSelectedMenu(pathname)
-    }, [location.pathname])
+        store.setSelectedMenu(pathname);
+    }, [location.pathname]);
 
-    /**
-     * 菜单切换
-     * @param item 
-     */
     const onMenuChange = (item: { key: string }) => {
         startTransition(() => {
-            // 跳转路由
-            navigate(item.key)
+            navigate(item.key);
         });
-    }
+    };
 
     const handleMenuClic_shorthand = () => {
         console.log('菜单项被点击');
-        // 这里可以执行你想要的操作
-        shortHandStore.setOpen(true)
+        shortHandStore.setOpen(true);
         return;
-      };
-    
+    };
+
     const [popoverOpen, setPopoverOpen] = useState(false);
     return (
         <Layout className={styles['workbench']}>
@@ -59,11 +51,9 @@ export default function Workbench() {
                     <Popover
                         overlayClassName={styles['workbench-popover']}
                         placement="rightTop"
-                        // content={<UserBox />}
                         content={<UserBox onClose={() => setPopoverOpen(false)} />}
                         open={popoverOpen}
                         onOpenChange={setPopoverOpen}
-
                     >
                         <Image
                             width='48px'
@@ -96,10 +86,9 @@ export default function Workbench() {
                     onSelect={onMenuChange}
                 />
 
-
-                <Menu  style={{ position: 'absolute',  width:'100%',bottom: 0 }} 
+                <Menu style={{ position: 'absolute', width: '100%', bottom: 0 }}
                     mode="inline"
-                    selectable={false} // 禁用选中效果
+                    selectable={false}
                     onClick={handleMenuClic_shorthand}
                     items={[
                         {
@@ -107,15 +96,16 @@ export default function Workbench() {
                             icon: <FileAddOutlined />,
                             label: 'Shorthand',
                         }
-                    ]}                            
-                    />             
+                    ]}
+                />
             </Sider>
             <Content>
                 <Outlet />
             </Content>
 
-            {/* shorthand */}
-            <ShortHandModal/>            
+            <ShortHandModal />
+
+            <ChatBotComponent />
         </Layout>
-    )
+    );
 }
