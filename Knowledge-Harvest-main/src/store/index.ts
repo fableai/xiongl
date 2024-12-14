@@ -5,6 +5,7 @@ import Emitter from '../emitter'
 import useWorkbenchStore from '../pages/Workbench/store'
 import { Languages, i18n } from 'i18n'
 import { Stripe, loadStripe } from '@stripe/stripe-js'
+import useChatStore from './chat'
 
 type UserType = {
     name: string,
@@ -68,7 +69,7 @@ const useGlobalStore = create<GlobalStore>((set, get) => ({
         if (messageChannel) {
 
         }
-        
+
         // 建立消息通道
         createMessageChannel(userGuid).then((messageChannel) => {
             set({ messageChannel })
@@ -111,10 +112,10 @@ const useGlobalStore = create<GlobalStore>((set, get) => ({
 
     systemConfig: {
         // googleClientId: '222670888542-6dajb24ch1svbn31314u8mp2elflfvhq.apps.googleusercontent.com',
-        googleClientId: '222670888542-e65o52bfiusr0n0d3egus5etfstgv249.apps.googleusercontent.com',        
+        googleClientId: '222670888542-e65o52bfiusr0n0d3egus5etfstgv249.apps.googleusercontent.com',
         // stripePubKey: 'pk_test_51PUgkdE1Q2U4w67Q5iH9lhv7cMLNHcO4LHvwpnrtFQefi5EDKjN3AO92xWilwTAPzaUe2EeRLD8WJDv25x6f1mLR00qBPQmkwI'
         stripePubKey: 'pk_live_51PUgkdE1Q2U4w67QOcKLVJe1kaZc7N1rSFZbYgRGvXEhSzVsAQYVIvmW6PrqYXryMK2Y9J1qdcmA6ccK7nmlRTCJ00gQ9AzCsl'
-        
+
     },
     fetchSystemConfig: async () => {
         const result = await fetchGetSetParams()
@@ -126,7 +127,7 @@ const useGlobalStore = create<GlobalStore>((set, get) => ({
     loadStripe: async () => {
         const { systemConfig } = get()
         const { stripePubKey } = systemConfig
-                
+
         console.log("test:stripePubKey:" + stripePubKey);
 
         const stripePromise = loadStripe(stripePubKey);
@@ -153,3 +154,4 @@ const useGlobalStore = create<GlobalStore>((set, get) => ({
 }))
 
 export default useGlobalStore
+export { useChatStore }
