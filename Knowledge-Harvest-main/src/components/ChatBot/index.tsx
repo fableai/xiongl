@@ -65,15 +65,20 @@ export const ChatBotComponent: React.FC = () => {
               await params.injectMessage(assistantMessage.msg, 'assistant');
             }
           }
+          return 'end';  // Add path to end state
         } catch (error) {
           console.error('Failed to send message:', error);
           if (thinkingId) {
             await params.removeMessage(thinkingId);
           }
           await params.injectMessage('发送消息失败，请重试', 'assistant');
+          return 'end';  // Add path to end state even on error
         }
-      },
-      path: 'start'
+      }
+    },
+    end: {
+      message: '感谢您的使用！如需继续对话，请刷新页面。',
+      chatDisabled: true
     }
   };
 
@@ -85,6 +90,10 @@ export const ChatBotComponent: React.FC = () => {
     },
     botBubble: {
       dangerouslySetInnerHtml: true,
+      position: 'left'  // Add position for bot messages
+    },
+    userBubble: {
+      position: 'right'  // Add position for user messages
     },
     chatWindow: {
       defaultOpen: false,
