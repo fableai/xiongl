@@ -24,7 +24,7 @@ export const fetchChatSendMessage = async (params: {
     message: ChatMessage[];
 }): Promise<ChatResponse> => {
     try {
-        const response = await api.post('/Chat/SendMessage', {
+        const response = await api.post('/Chat/ChatSendMessage', {
             userGuid: params.userGuid,
             chatid: params.chatid,
             message: params.message

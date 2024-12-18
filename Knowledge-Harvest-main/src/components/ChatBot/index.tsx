@@ -32,61 +32,91 @@ export const ChatBotComponent: React.FC = () => {
     }
   }, [userGuid]);
 
+  const callAPI = async (userInput) => {
+    try {
+      debugger;
+      const response = await fetchChatSendMessage({
+        userGuid,
+        chatid: chatId || undefined,
+        message: [{
+          role: 'user',
+          msg: userInput,
+          index: 1,
+        }]
+      });
+      var assistantMessage  = {};
+      if (response.data.chatId) {
+        setChatId(response.data.chatId);
+        assistantMessage = response.data.message.find(msg => msg.role === 'assistant');        
+      }
+
+      return assistantMessage.msg;
+    } catch (error) {
+      console.error('API Error:', error)
+      return 'Sorry, there was an error processing your request.'
+    }
+  }
+
   // Define chat flow
   const flow: Flow = {
     start: {
       message: '请输入您的问题',
-      function: async (params: Params) => {
-        if (!params.userInput) return;
+      path: "end_loop"
+      // function: async (params: Params) => {
+      //   if (!params.userInput) return;
 
-        const messageIndex = Date.now();
-        await params.injectMessage(params.userInput, 'user');
-        const thinkingId = await params.injectMessage('思考中...', 'assistant');
+      //   const messageIndex = Date.now();
+      //   await params.injectMessage(params.userInput, 'user');
+      //   const thinkingId = await params.injectMessage('思考中...', 'assistant');
+      //   debugger;
+      //   try {
+      //     const response = await fetchChatSendMessage({
+      //       userGuid,
+      //       chatid: chatId || undefined,
+      //       message: [{
+      //         role: 'user',
+      //         msg: params.userInput,
+      //         index: messageIndex,
+      //       }]
+      //     });
 
-        try {
-          const response = await fetchChatSendMessage({
-            userGuid,
-            chatid: chatId || undefined,
-            message: [{
-              role: 'user',
-              msg: params.userInput,
-              index: messageIndex,
-            }]
-          });
+      //     if (thinkingId) {
+      //       await params.removeMessage(thinkingId);
+      //     }
 
-          if (thinkingId) {
-            await params.removeMessage(thinkingId);
-          }
-
-          if (response.chatid) {
-            setChatId(response.chatid);
-            const assistantMessage = response.message.find(msg => msg.role === 'assistant');
-            if (assistantMessage) {
-              await params.injectMessage(assistantMessage.msg, 'assistant');
-            }
-          }
-          return 'end';  // Add path to end state
-        } catch (error) {
-          console.error('Failed to send message:', error);
-          if (thinkingId) {
-            await params.removeMessage(thinkingId);
-          }
-          await params.injectMessage('发送消息失败，请重试', 'assistant');
-          return 'end';  // Add path to end state even on error
-        }
-      }
+      //     if (response.chatid) {
+      //       setChatId(response.chatid);
+      //       const assistantMessage = response.message.find(msg => msg.role === 'assistant');
+      //       if (assistantMessage) {
+      //         await params.injectMessage(assistantMessage.msg, 'assistant');
+      //       }
+      //     }
+      //     return 'end';  // Add path to end state
+      //   } catch (error) {
+      //     console.error('Failed to send message:', error);
+      //     if (thinkingId) {
+      //       await params.removeMessage(thinkingId);
+      //     }
+      //     await params.injectMessage('发送消息失败，请重试', 'assistant');
+      //     return 'end';  // Add path to end state even on error
+      //   }
+      // }
     },
-    end: {
-      message: '感谢您的使用！如需继续对话，请刷新页面。',
-      chatDisabled: true
+    end_loop: {
+      message: async (params) => {
+        debugger;
+        const apiResponse = await callAPI(params.userInput)
+        return apiResponse
+      },
+      path: "end_loop"
     }
   };
 
   const settings: Settings = {
     general: {
       embedded: false,
-      primaryColor: token.colorPrimary,
-      secondaryColor: token.colorBgContainer,
+      // primaryColor: token.colorPrimary,
+      // secondaryColor: token.colorBgContainer,
     },
     botBubble: {
       dangerouslySetInnerHtml: true,
@@ -103,6 +133,13 @@ export const ChatBotComponent: React.FC = () => {
       title: '客服助手',
     },
   };
+
+  const settings2 = {
+    general: { embedded: true },
+    chatHistory: { storageKey: "playground" },
+    botBubble: { simStream: true }
+  }
+  
 
   // Apply dark theme class to body when theme changes
   useEffect(() => {
